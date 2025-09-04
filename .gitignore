@@ -3,7 +3,7 @@
 *.tfstate.*
 
 # Terraform local working directory
-**/.terraform/
+**/.terraform/*
 
 # Terraform variable files (consider ignoring only sensitive ones)
 *.tfvars
