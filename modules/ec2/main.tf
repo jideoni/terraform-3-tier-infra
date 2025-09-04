@@ -274,7 +274,8 @@ resource "aws_lb" "internal_lb" {
 
 #web alb
 resource "aws_lb" "external_lb" {
-  name                       = "alb-external"
+  name = "alb-external"
+  #tfsec:ignore:aws-elb-alb-not-public
   internal                   = false #internet facing
   load_balancer_type         = "application"
   drop_invalid_header_fields = true

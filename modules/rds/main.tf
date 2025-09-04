@@ -26,21 +26,21 @@ resource "aws_rds_cluster" "rds_cluster_dev" {
   db_subnet_group_name    = aws_db_subnet_group.ruby_db_subnet_group.name
   vpc_security_group_ids  = var.db_sg
   monitoring_interval     = 0
-
-  skip_final_snapshot = true
+  skip_final_snapshot     = true
 
   depends_on = [aws_db_subnet_group.ruby_db_subnet_group]
 }
 
 resource "aws_rds_cluster_instance" "rds_cluster_dev_instances" {
-  count                        = var.instance_count
-  identifier                   = "aurora-cluster-dev-${count.index}"
-  cluster_identifier           = aws_rds_cluster.rds_cluster_dev.id
-  instance_class               = "db.t3.meduim"
-  engine                       = aws_rds_cluster.rds_cluster_dev.engine
-  engine_version               = aws_rds_cluster.rds_cluster_dev.engine_version
-  performance_insights_enabled = true
-  kms_key_id                   = var.key_arn
+  count                           = var.instance_count
+  identifier                      = "aurora-cluster-dev-${count.index}"
+  cluster_identifier              = aws_rds_cluster.rds_cluster_dev.id
+  instance_class                  = "db.t3.meduim"
+  engine                          = aws_rds_cluster.rds_cluster_dev.engine
+  engine_version                  = aws_rds_cluster.rds_cluster_dev.engine_version
+  performance_insights_enabled    = true
+  performance_insights_kms_key_id = var.key_arn
+  kms_key_id                      = var.key_arn
 
   apply_immediately = true
 }
