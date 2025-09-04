@@ -1,7 +1,5 @@
-variable "region" {
-  type = string
-  #default = "ca-central-1"
-}
+variable "region" {}
+variable "kms_key_arn" {}
 variable "infra_env" {
   type        = string
   description = "infrastructure environment"

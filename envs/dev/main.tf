@@ -10,9 +10,10 @@ module "vpc_networking" {
 
 #create s3 buckets
 module "create_buckets" {
-  source    = "../../modules/s3"
-  infra_env = var.infra_env
-  region    = var.region
+  source      = "../../modules/s3"
+  infra_env   = var.infra_env
+  region      = var.region
+  kms_key_arn = module.kms.key_arn
 }
 
 #Uncomment this section to launch DB
@@ -87,4 +88,10 @@ module "cloudtrail" {
   infra_env                       = var.infra_env
   cloudtrail_bucket_name          = module.create_buckets.cloudtrail_bucket_name
   cloudtrail_bucket_bucket_policy = module.iam.cloudtrail_bucket_policy
+}
+
+module "kms" {
+  source    = "../../modules/kms"
+  region    = var.region
+  infra_env = var.infra_env
 }

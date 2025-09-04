@@ -19,6 +19,18 @@ resource "aws_s3_bucket_versioning" "versioning" {
   }
 }
 
+resource "aws_s3_bucket_server_side_encryption_configuration" "example" {
+  for_each = var.bucket_name
+  bucket   = aws_s3_bucket.buckets[each.key].id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = var.kms_key_arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
 resource "aws_s3_bucket_public_access_block" "code_bucket_block_public" {
   for_each = var.bucket_name
 
