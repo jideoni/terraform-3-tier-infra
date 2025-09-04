@@ -7,6 +7,10 @@ resource "aws_instance" "app" {
   vpc_security_group_ids = [var.app_security_group_id]
   subnet_id              = var.subnet_app
 
+  metadata_options {
+    http_tokens = required
+  }
+
   root_block_device {
     delete_on_termination = true
     encrypted             = true
@@ -29,6 +33,10 @@ resource "aws_instance" "web" {
   iam_instance_profile   = var.instance_profile
   vpc_security_group_ids = [var.web_security_group_id]
   subnet_id              = var.subnet_web
+
+  metadata_options {
+    http_tokens = required
+  }
 
   root_block_device {
     delete_on_termination = true
