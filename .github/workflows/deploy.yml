@@ -65,6 +65,9 @@ jobs:
       - name: "tfsec"
         run: tfsec .
 
+      - name: "go to terraform directory"
+        run: cd envs/dev
+
       - name: "Terraform Plan"
         run: terraform plan -out=tfplan
 
