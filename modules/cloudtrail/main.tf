@@ -6,4 +6,5 @@ resource "aws_cloudtrail" "account_trail" {
   include_global_service_events = true
   kms_key_id                    = var.key_arn
   enable_log_file_validation    = true
+  is_multi_region_trail         = true
 }

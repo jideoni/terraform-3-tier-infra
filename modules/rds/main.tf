@@ -40,6 +40,7 @@ resource "aws_rds_cluster_instance" "rds_cluster_dev_instances" {
   engine                       = aws_rds_cluster.rds_cluster_dev.engine
   engine_version               = aws_rds_cluster.rds_cluster_dev.engine_version
   performance_insights_enabled = true
+  kms_key_id                   = var.key_arn
 
   apply_immediately = true
 }

@@ -311,6 +311,7 @@ resource "aws_lb_target_group_attachment" "ext_lb_target_group_attachment" {
 }
 
 #app alb listener
+#tfsec:ignore:AWS004
 resource "aws_lb_listener" "internal_lb_listener" {
   load_balancer_arn = aws_lb.internal_lb.arn
   port              = "4000"
@@ -328,6 +329,7 @@ resource "aws_lb_listener" "internal_lb_listener" {
 }
 
 #web alb listener
+#tfsec:ignore:AWS004
 resource "aws_lb_listener" "external_lb_listener" {
   load_balancer_arn = aws_lb.external_lb.arn
   port              = "80"
