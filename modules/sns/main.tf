@@ -23,7 +23,7 @@ resource "aws_sns_topic_subscription" "app_email_target" {
   for_each  = var.tier
   topic_arn = aws_sns_topic.notifications[each.key].arn
   protocol  = "email"
-  endpoint  = var.your_email
+  endpoint  = var.your_email_addres
 }
 
 #SNS permissions for ASG

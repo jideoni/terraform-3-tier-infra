@@ -20,11 +20,7 @@ variable "amazon_linux_2023_ami" {
   default     = "ami-02018c46119b25ffe"
 }
 
-variable "instance_type_web_and_app" {
-  description = "Instance type for WEB and APP TIER"
-  type        = string
-  default     = "t3.micro"
-}
+variable "instance_type_web_and_app" {}
 
 variable "instance_profile" {}
 

@@ -32,25 +32,26 @@ module "iam" {
 }
 
 module "ec2" {
-  source                   = "../../modules/ec2"
-  region                   = var.region
-  vpc_id                   = module.vpc_networking.vpc_id
-  infra_env                = var.infra_env
-  instance_profile         = module.iam.instance_profile
-  code_bucket_name         = module.create_buckets.code_bucket_name
-  subnet_app               = keys(module.vpc_networking.vpc_private_subnets)[0]
-  subnet_web               = keys(module.vpc_networking.vpc_public_subnets)[0]
-  app_security_group_id    = module.vpc_networking.app_sg_id
-  web_security_group_id    = module.vpc_networking.web_sg_id
-  all_app_subnets          = keys(module.vpc_networking.vpc_private_subnets)
-  all_web_subnets          = keys(module.vpc_networking.vpc_public_subnets)
-  int_lb_security_group_id = module.vpc_networking.internal_lb_sg_id
-  ext_lb_security_group_id = module.vpc_networking.external_lb_sg_id
-  app_topic_arn            = module.sns.app_topic_arn
-  web_topic_arn            = module.sns.web_topic_arn
-  desired_number           = var.instance_number_asg["desired"]
-  max_number               = var.instance_number_asg["max"]
-  min_number               = var.instance_number_asg["min"]
+  source                    = "../../modules/ec2"
+  region                    = var.region
+  vpc_id                    = module.vpc_networking.vpc_id
+  infra_env                 = var.infra_env
+  instance_profile          = module.iam.instance_profile
+  instance_type_web_and_app = var.instance_type_web_and_app
+  code_bucket_name          = module.create_buckets.code_bucket_name
+  subnet_app                = keys(module.vpc_networking.vpc_private_subnets)[0]
+  subnet_web                = keys(module.vpc_networking.vpc_public_subnets)[0]
+  app_security_group_id     = module.vpc_networking.app_sg_id
+  web_security_group_id     = module.vpc_networking.web_sg_id
+  all_app_subnets           = keys(module.vpc_networking.vpc_private_subnets)
+  all_web_subnets           = keys(module.vpc_networking.vpc_public_subnets)
+  int_lb_security_group_id  = module.vpc_networking.internal_lb_sg_id
+  ext_lb_security_group_id  = module.vpc_networking.external_lb_sg_id
+  app_topic_arn             = module.sns.app_topic_arn
+  web_topic_arn             = module.sns.web_topic_arn
+  desired_number            = var.instance_number_asg["desired"]
+  max_number                = var.instance_number_asg["max"]
+  min_number                = var.instance_number_asg["min"]
 }
 
 module "sns" {
