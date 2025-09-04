@@ -7,7 +7,6 @@ resource "aws_route53_record" "www" {
   name    = "www.ruby.click"
   type    = "A"
 
-  #records = [var.internal_load_balancer_public_ip]
   alias {
     name                   = var.external_load_balancer_public_ip
     zone_id                = var.external_load_balancer_zone_id

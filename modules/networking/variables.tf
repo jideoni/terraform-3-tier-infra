@@ -2,7 +2,6 @@ variable "region" {}
 variable "infra_env" {
   type        = string
   description = "infrastructure environment"
-  #default     = "ruby-dev"
 }
 
 variable "tcp" {
@@ -20,7 +19,6 @@ variable "icmp" {
 variable "vpc_cidr" {
   type        = string
   description = "The IP range for VPC"
-  #default     = "10.0.0.0/16"
 }
 
 variable "internet" {
@@ -34,7 +32,6 @@ variable "bucket_arn" {}
 variable "azs" {
   type        = list(string)
   description = "List if AZs"
-  #default     = ["ca-central-1a", "ca-central-1b", "ca-central-1d"]
 }
 
 variable "web_subnet_number" {
@@ -76,17 +73,11 @@ variable "db_subnet_number" {
   }
 }
 
-#variable "log_destination" {
-#  type = string
-#}
-
 variable "web_route_table" {
   type        = string
   description = "Route table for web tier (internet accessible)"
   default     = "web tier route table"
 }
-
-
 
 variable "app_route_table" {
   type        = map(number)

@@ -144,29 +144,8 @@ resource "aws_subnet" "db" {
     Name        = "${var.infra_env}-db-subnet-${each.key}"
     Role        = "private"
     Environment = var.infra_env
-    #Subnet      = "${each.key}-${each.value}"
   }
 }
-
-/*###using count
-resource "aws_subnet" "private" {
-  count = length(var.private_subnet_number)
-
-  vpc_id = aws_vpc.vpc.id
-
-  #cidr_block - cidrsubnet(prefix, newbits, netnum)
-  #newbits is the number of additional bits with which to extend the prefix. For example,
-  #if given a prefix ending in /16 and a newbits value of 4,
-  #the resulting subnet address will have length /20.
-  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, 4, count.index)
-
-  tags = {
-    Name        = "${var.infra_env}-private-subnet-${count.index}"
-    Role        = "private"
-    Environment = var.infra_env
-    #Subnet      = "${each.key}-${each.value}"
-  }
-}*/
 
 #create web route table
 resource "aws_route_table" "web_rt" {
@@ -215,14 +194,6 @@ resource "aws_route_table" "app_rt_1" {
   }
 }
 
-/*#associate app subnets with app rt 1
-resource "aws_route_table_association" "app_subnet_association_1" {
-  for_each = aws_subnet.app
-
-  subnet_id      = each.value.id
-  route_table_id = aws_route_table.app_rt_1.id
-}*/
-
 #associate app subnets with app rt 1
 resource "aws_route_table_association" "app_subnet_association_1" {
   subnet_id      = aws_subnet.app["ca-central-1a"].id
@@ -240,7 +211,7 @@ resource "aws_route_table" "app_rt_2" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.ruby_nat_gw_2.id #change this to NAT gateway
+    gateway_id = aws_nat_gateway.ruby_nat_gw_2.id
   }
 
   tags = {
@@ -266,7 +237,7 @@ resource "aws_route_table" "app_rt_3" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.ruby_nat_gw_3.id #change this to NAT gateway
+    gateway_id = aws_nat_gateway.ruby_nat_gw_3.id
   }
 
   tags = {
@@ -358,7 +329,7 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic" {
 
   security_group_id = aws_security_group.security_groups[each.key].id
   cidr_ipv4         = var.internet
-  ip_protocol       = "-1" # semantically equivalent to all ports
+  ip_protocol       = "-1" # all ports
 }
 
 resource "aws_vpc_security_group_ingress_rule" "db-SG-rule" {

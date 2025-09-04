@@ -3,16 +3,9 @@ resource "aws_instance" "app" {
   ami           = var.amazon_linux_2023_ami
   instance_type = var.instance_type_web_and_app
 
-  iam_instance_profile = var.instance_profile
-  #security_groups      = var.app_security_group
+  iam_instance_profile   = var.instance_profile
   vpc_security_group_ids = [var.app_security_group_id]
   subnet_id              = var.subnet_app
-
-  /*network_interface {
-    network_interface_id = aws_network_interface.eni_web_subnet_1.id
-    #delete_on_termination = true
-    device_index = 0
-  }*/
 
   user_data = file("${path.module}/userdataapp.sh")
 
@@ -27,16 +20,9 @@ resource "aws_instance" "web" {
   ami           = var.amazon_linux_2023_ami
   instance_type = var.instance_type_web_and_app
 
-  iam_instance_profile = var.instance_profile
-  #security_groups      = var.app_security_group
+  iam_instance_profile   = var.instance_profile
   vpc_security_group_ids = [var.web_security_group_id]
   subnet_id              = var.subnet_web
-
-  /*network_interface {
-    network_interface_id = aws_network_interface.eni_web_subnet_1.id
-    #delete_on_termination = true
-    device_index = 0
-  }*/
 
   user_data = file("${path.module}/userdataweb.sh")
 
@@ -107,19 +93,7 @@ resource "aws_launch_template" "app_template" {
 
   instance_initiated_shutdown_behavior = "terminate"
 
-  #instance_market_options {
-  #  market_type = "spot"
-  #}
-
   instance_type = var.instance_type_web_and_app
-
-  #kernel_id = "test"
-
-  #key_name = "test"
-
-  #license_specification {
-  #  license_configuration_arn = "arn:aws:license-manager:ca-central-1:123456789012:license-configuration:lic-0123456789abcdef0123456789abcdef"
-  #}
 
   metadata_options {
     http_endpoint               = "enabled"
@@ -131,16 +105,6 @@ resource "aws_launch_template" "app_template" {
   monitoring {
     enabled = true
   }
-
-  #network_interfaces {
-  #  associate_public_ip_address = true
-  #}
-
-  #placement {
-  #  availability_zone = "ca-central-1a"
-  #}
-
-  #ram_disk_id = "test"
 
   vpc_security_group_ids = [var.app_security_group_id]
 
@@ -193,19 +157,7 @@ resource "aws_launch_template" "web_template" {
 
   instance_initiated_shutdown_behavior = "terminate"
 
-  #instance_market_options {
-  #  market_type = "spot"
-  #}
-
   instance_type = var.instance_type_web_and_app
-
-  #kernel_id = "test"
-
-  #key_name = "test"
-
-  #license_specification {
-  #  license_configuration_arn = "arn:aws:license-manager:ca-central-1:123456789012:license-configuration:lic-0123456789abcdef0123456789abcdef"
-  #}
 
   metadata_options {
     http_endpoint               = "enabled"
@@ -351,13 +303,8 @@ resource "aws_lb_target_group_attachment" "ext_lb_target_group_attachment" {
 #app alb listener
 resource "aws_lb_listener" "internal_lb_listener" {
   load_balancer_arn = aws_lb.internal_lb.arn
-  #port              = "80"
-  port = "4000"
-  #protocol          = "HTTPS"
-  protocol = "HTTP"
-  #ssl_policy        = "ELBSecurityPolicy-2016-08"
-  #certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
-
+  port              = "4000"
+  protocol          = "HTTP"
   default_action {
     type = "forward"
 
@@ -366,11 +313,6 @@ resource "aws_lb_listener" "internal_lb_listener" {
         arn    = aws_lb_target_group.app_instance_tg.arn
         weight = 100
       }
-      #to specify more target groups
-      #target_group {
-      #  arn    = aws_lb_target_group.app_instance_tg.arn
-      #  weight = 0
-      #}
     }
   }
 }
@@ -379,11 +321,7 @@ resource "aws_lb_listener" "internal_lb_listener" {
 resource "aws_lb_listener" "external_lb_listener" {
   load_balancer_arn = aws_lb.external_lb.arn
   port              = "80"
-  #protocol          = "HTTPS"
-  protocol = "HTTP"
-  #ssl_policy        = "ELBSecurityPolicy-2016-08"
-  #certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
-
+  protocol          = "HTTP"
   default_action {
     type = "forward"
 
@@ -392,11 +330,6 @@ resource "aws_lb_listener" "external_lb_listener" {
         arn    = aws_lb_target_group.web_instance_tg.arn
         weight = 100
       }
-      #to specify more target groups
-      #target_group {
-      #  arn    = aws_lb_target_group.app_instance_tg.arn
-      #  weight = 0
-      #}
     }
   }
 }
@@ -470,7 +403,6 @@ resource "aws_autoscaling_policy" "web_asg_scaling_policy" {
 resource "aws_autoscaling_notification" "app_asg_notifications" {
   group_names = [
     aws_autoscaling_group.app_asg.name
-    #aws_autoscaling_group.foo.name,
   ]
 
   notifications = [
@@ -479,7 +411,6 @@ resource "aws_autoscaling_notification" "app_asg_notifications" {
     "autoscaling:EC2_INSTANCE_LAUNCH_ERROR",
     "autoscaling:EC2_INSTANCE_TERMINATE_ERROR",
   ]
-
   topic_arn = var.app_topic_arn
 }
 
@@ -487,7 +418,6 @@ resource "aws_autoscaling_notification" "app_asg_notifications" {
 resource "aws_autoscaling_notification" "web_asg_notifications" {
   group_names = [
     aws_autoscaling_group.web_asg.name
-    #aws_autoscaling_group.foo.name,
   ]
 
   notifications = [
@@ -496,6 +426,5 @@ resource "aws_autoscaling_notification" "web_asg_notifications" {
     "autoscaling:EC2_INSTANCE_LAUNCH_ERROR",
     "autoscaling:EC2_INSTANCE_TERMINATE_ERROR",
   ]
-
   topic_arn = var.web_topic_arn
 }

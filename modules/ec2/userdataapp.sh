@@ -21,4 +21,4 @@ pm2 logs            #(To see logs, run Ctrl+C to exit)
 pm2 startup 			  #(Set PM2 to Start on Boot)
 sudo env PATH=$PATH:/home/ec2-user/.nvm/versions/node/v16.20.2/bin /home/ec2-user/.nvm/versions/node/v16.20.2/lib/node_modules/pm2/bin/pm2 startup systemd -u ec2-user --hp /home/ec2-user
 pm2 save			      #(Save the current configuration)
-#curl http://localhost:4000/health #(To do the health check)
+#curl http://localhost:4000/ #(To do the health check)

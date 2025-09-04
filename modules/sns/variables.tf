@@ -17,8 +17,4 @@ variable "cloudwatch_sns" {
   default = "cloudwatch"
 }
 
-variable "your_email" {
-  description = "the email address where you want notifications to go"
-  type        = string
-  default     = "onibabajide345@gmail.com" #your email address here
-}
+variable "your_email_addres" {}

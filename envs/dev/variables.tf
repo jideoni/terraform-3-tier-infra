@@ -44,3 +44,9 @@ variable "instance_number_asg" {
     "min"     = 2
   }
 }
+
+variable "your_email" {
+  description = "the email address where you want notifications to go"
+  type        = string
+  default     = "youremail@gmail.com" #your email address here
+}

@@ -32,7 +32,6 @@ data "aws_iam_policy_document" "allow_access_to_s3_policy_document" {
       "s3-object-lambda:Get*",
       "s3-object-lambda:List*"
     ]
-    #resources = ["*"] #which s3 bucket? var.cloudtrail_bucket_arn
     resources = [var.code_bucket_arn]
   }
 }
@@ -43,21 +42,12 @@ resource "aws_iam_policy" "allow_access_to_s3_policy" {
   policy      = data.aws_iam_policy_document.allow_access_to_s3_policy_document.json
 }
 
-/*resource "aws_iam_role_policy_attachment" "attach_allow_access_to_s3_policy_to_role" {
-  role = aws_iam_role.app_ec2_access_s3_and_ssm.name
-  #policy_arn = aws_iam_policy.allow_access_to_s3_policy.arn
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-}*/
-
 #attach policies to role
 resource "aws_iam_role_policy_attachment" "attachments" {
   for_each   = toset(var.ssm_and_s3_read_only_managed_policies)
   role       = aws_iam_role.app_ec2_access_s3_and_ssm.name
   policy_arn = each.key
 }
-
-
-
 
 data "aws_iam_policy_document" "allow_cloudtrail_policy_document" {
   statement {
@@ -71,12 +61,6 @@ data "aws_iam_policy_document" "allow_cloudtrail_policy_document" {
 
     actions   = ["s3:GetBucketAcl"]
     resources = [var.cloudtrail_bucket_arn]
-
-    #condition {
-    #  test     = "StringEquals"
-    #  variable = "aws:SourceArn"
-    #  values   = ["arn:${data.aws_partition.current.partition}:cloudtrail:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:trail/example"]
-    #}
   }
 
   statement {
@@ -88,19 +72,8 @@ data "aws_iam_policy_document" "allow_cloudtrail_policy_document" {
       identifiers = ["cloudtrail.amazonaws.com"]
     }
 
-    actions = ["s3:PutObject"]
-    #resources = ["${aws_s3_bucket.example.arn}/prefix/AWSLogs/${data.aws_caller_identity.current.account_id}/*"]
+    actions   = ["s3:PutObject"]
     resources = ["${var.cloudtrail_bucket_arn}/*"]
-    /*condition {
-      test     = "StringEquals"
-      variable = "s3:x-amz-acl"
-      values   = ["bucket-owner-full-control"]
-    }
-    condition {
-      test     = "StringEquals"
-      variable = "aws:SourceArn"
-      values   = ["arn:${data.aws_partition.current.partition}:cloudtrail:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:trail/example"]
-    }*/
   }
 }
 

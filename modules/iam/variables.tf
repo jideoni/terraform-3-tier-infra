@@ -2,6 +2,7 @@ variable "region" {
   type    = string
   default = "ca-central-1"
 }
+
 variable "infra_env" {
   type        = string
   description = "infrastructure environment"
@@ -17,6 +18,5 @@ variable "ssm_and_s3_read_only_managed_policies" {
 }
 
 variable "code_bucket_arn" {}
-
 variable "cloudtrail_bucket_arn" {}
 variable "cloudtrail_bucket_name" {}

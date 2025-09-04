@@ -15,6 +15,7 @@ module "create_buckets" {
   region    = var.region
 }
 
+#Uncomment this section to launch DB
 /*module "rds" {
   source = "../../modules/rds"
 
@@ -53,9 +54,10 @@ module "ec2" {
 }
 
 module "sns" {
-  source    = "../../modules/sns"
-  region    = var.region
-  infra_env = var.infra_env
+  source            = "../../modules/sns"
+  region            = var.region
+  infra_env         = var.infra_env
+  your_email_addres = var.your_email
 }
 
 module "cloudwatch" {
