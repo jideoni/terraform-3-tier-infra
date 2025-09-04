@@ -26,11 +26,17 @@ data "aws_iam_policy_document" "allow_access_to_s3_policy_document" {
   statement {
     effect = "Allow"
     actions = [
-      "s3:Get*",
-      "s3:List*",
-      "s3:Describe*",
-      "s3-object-lambda:Get*",
-      "s3-object-lambda:List*"
+      #"s3:Get*",
+      #"s3:List*",
+      #"s3:Describe*",
+      #"s3-object-lambda:Get*",
+      #"s3-object-lambda:List*"
+      "s3:GetObjects",
+      "s3:ListBucket",
+      "s3:ListAllMyBuckets"
+      #"s3:Describe*",
+      #"s3-object-lambda:Get*",
+      #"s3-object-lambda:List*"
     ]
     resources = [var.code_bucket_arn]
   }

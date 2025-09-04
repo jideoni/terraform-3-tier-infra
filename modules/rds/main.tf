@@ -11,6 +11,8 @@ resource "aws_rds_cluster" "rds_cluster_dev" {
   cluster_identifier = var.cluster_identifier
   engine             = var.engine
   engine_version     = var.engine_version
+  storage_encrypted  = true
+  kms_key_id         = var.key_arn
 
   #allow_major_version_upgrade = true
   #apply_immediately           = true

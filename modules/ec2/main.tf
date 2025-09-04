@@ -7,6 +7,12 @@ resource "aws_instance" "app" {
   vpc_security_group_ids = [var.app_security_group_id]
   subnet_id              = var.subnet_app
 
+  root_block_device {
+    delete_on_termination = true
+    encrypted             = true
+    kms_key_id            = var.key_arn
+  }
+
   user_data = file("${path.module}/userdataapp.sh")
 
   tags = {
@@ -23,6 +29,12 @@ resource "aws_instance" "web" {
   iam_instance_profile   = var.instance_profile
   vpc_security_group_ids = [var.web_security_group_id]
   subnet_id              = var.subnet_web
+
+  root_block_device {
+    delete_on_termination = true
+    encrypted             = true
+    kms_key_id            = var.key_arn
+  }
 
   user_data = file("${path.module}/userdataweb.sh")
 
@@ -234,10 +246,10 @@ resource "aws_lb_target_group" "web_instance_tg" {
 
 #app alb
 resource "aws_lb" "internal_lb" {
-  name     = "alb-internal"
-  internal = true
-
-  load_balancer_type = "application"
+  name                       = "alb-internal"
+  internal                   = true
+  load_balancer_type         = "application"
+  drop_invalid_header_fields = true
 
   security_groups = [var.int_lb_security_group_id]
   subnets         = toset(var.all_app_subnets)
@@ -252,9 +264,10 @@ resource "aws_lb" "internal_lb" {
 
 #web alb
 resource "aws_lb" "external_lb" {
-  name               = "alb-external"
-  internal           = false #internet facing
-  load_balancer_type = "application"
+  name                       = "alb-external"
+  internal                   = false #internet facing
+  load_balancer_type         = "application"
+  drop_invalid_header_fields = true
 
   security_groups = [var.ext_lb_security_group_id]
   subnets         = toset(var.all_web_subnets)

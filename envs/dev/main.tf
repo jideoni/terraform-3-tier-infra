@@ -19,6 +19,7 @@ module "create_buckets" {
 #Uncomment this section to launch DB
 /*module "rds" {
   source = "../../modules/rds"
+  key_arn           = module.kms.key_arn
 
   db_sg = keys(module.vpc_networking.security_groups_created)[4]
 
@@ -53,6 +54,7 @@ module "ec2" {
   desired_number            = var.instance_number_asg["desired"]
   max_number                = var.instance_number_asg["max"]
   min_number                = var.instance_number_asg["min"]
+  key_arn                   = module.kms.key_arn
 }
 
 module "sns" {
@@ -60,6 +62,7 @@ module "sns" {
   region            = var.region
   infra_env         = var.infra_env
   your_email_addres = var.your_email
+  key_arn           = module.kms.key_arn
 }
 
 module "cloudwatch" {

@@ -26,8 +26,7 @@ variable "subnet_ids" {
 }
 
 variable "azs" {
-  type = list(string)
-
+  type    = list(string)
   default = ["ca-central-1a", "ca-central-1b", "ca-central-1d"]
 }
 
@@ -58,6 +57,5 @@ variable "engine" {
   default = "aurora-mysql"
 }
 
-variable "db_sg" {
-
-}
+variable "db_sg" {}
+variable "key_arn" {}
