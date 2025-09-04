@@ -88,6 +88,7 @@ module "cloudtrail" {
   infra_env                       = var.infra_env
   cloudtrail_bucket_name          = module.create_buckets.cloudtrail_bucket_name
   cloudtrail_bucket_bucket_policy = module.iam.cloudtrail_bucket_policy
+  key_arn                         = module.kms.key_arn
 }
 
 module "kms" {
