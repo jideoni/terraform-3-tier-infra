@@ -14,18 +14,6 @@ variable "vpc_cidr_block" {
   default = "10.0.0.0/17" #your vpc cider block here
 }
 
-variable "bucket_name" {
-  type = map(number)
-
-  description = "Name of S3 bucket"
-
-  default = {
-    #key = value
-    "bucket-for-code"     = 1
-    "bucket-vpc-flow-log" = 2
-  }
-}
-
 variable "azs" {
   type        = list(string)
   description = "List if AZs"
@@ -49,4 +37,10 @@ variable "your_email" {
   description = "the email address where you want notifications to go"
   type        = string
   default     = "youremail@gmail.com" #your email address here
+}
+
+variable "instance_type_web_and_app" {
+  description = "Instance type for WEB and APP TIER"
+  type        = string
+  default     = "t3.micro"
 }
