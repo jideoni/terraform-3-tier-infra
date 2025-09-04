@@ -96,7 +96,7 @@ resource "aws_subnet" "web" {
   #the resulting subnet address will have length /20.
   cidr_block              = cidrsubnet(aws_vpc.ruby_vpc.cidr_block, 4, each.value)
   availability_zone       = each.key
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = false
 
   tags = {
     Name        = "${var.infra_env}-web-subnet-${each.key}"

@@ -8,7 +8,8 @@ resource "aws_instance" "app" {
   subnet_id              = var.subnet_app
 
   metadata_options {
-    http_tokens = required
+    http_tokens   = "required"
+    http_endpoint = "enabled"
   }
 
   root_block_device {
@@ -35,7 +36,8 @@ resource "aws_instance" "web" {
   subnet_id              = var.subnet_web
 
   metadata_options {
-    http_tokens = required
+    http_tokens   = "required"
+    http_endpoint = "enabled"
   }
 
   root_block_device {

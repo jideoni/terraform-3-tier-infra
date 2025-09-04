@@ -33,12 +33,13 @@ resource "aws_rds_cluster" "rds_cluster_dev" {
 }
 
 resource "aws_rds_cluster_instance" "rds_cluster_dev_instances" {
-  count              = var.instance_count
-  identifier         = "aurora-cluster-dev-${count.index}"
-  cluster_identifier = aws_rds_cluster.rds_cluster_dev.id
-  instance_class     = "db.t3.meduim"
-  engine             = aws_rds_cluster.rds_cluster_dev.engine
-  engine_version     = aws_rds_cluster.rds_cluster_dev.engine_version
+  count                        = var.instance_count
+  identifier                   = "aurora-cluster-dev-${count.index}"
+  cluster_identifier           = aws_rds_cluster.rds_cluster_dev.id
+  instance_class               = "db.t3.meduim"
+  engine                       = aws_rds_cluster.rds_cluster_dev.engine
+  engine_version               = aws_rds_cluster.rds_cluster_dev.engine_version
+  performance_insights_enabled = true
 
   apply_immediately = true
 }
