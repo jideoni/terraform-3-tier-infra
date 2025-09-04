@@ -70,3 +70,7 @@ variable "target_tracking_policy" {
 variable "app_topic_arn" {}
 
 variable "web_topic_arn" {}
+
+variable "desired_number" {}
+variable "max_number" {}
+variable "min_number" {}

@@ -31,3 +31,16 @@ variable "azs" {
   description = "List if AZs"
   default     = ["ca-central-1a", "ca-central-1b", "ca-central-1d"]
 }
+
+variable "instance_number_asg" {
+  type = map(number)
+
+  description = "Number of instances in ASG"
+
+  default = {
+    #key = value
+    "desired" = 2
+    "max"     = 3
+    "min"     = 2
+  }
+}

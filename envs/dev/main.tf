@@ -47,6 +47,9 @@ module "ec2" {
   ext_lb_security_group_id = module.vpc_networking.external_lb_sg_id
   app_topic_arn            = module.sns.app_topic_arn
   web_topic_arn            = module.sns.web_topic_arn
+  desired_number           = var.instance_number_asg["desired"]
+  max_number               = var.instance_number_asg["max"]
+  min_number               = var.instance_number_asg["min"]
 }
 
 module "sns" {
