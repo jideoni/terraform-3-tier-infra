@@ -54,7 +54,6 @@ resource "aws_ami_from_instance" "web_instance_ami" {
   }
 }
 
-
 #app launch template
 resource "aws_launch_template" "app_template" {
   name = var.app_template_name
@@ -170,16 +169,6 @@ resource "aws_launch_template" "web_template" {
     enabled = true
   }
 
-  #network_interfaces {
-  #  associate_public_ip_address = true
-  #}
-
-  #placement {
-  #  availability_zone = "ca-central-1a"
-  #}
-
-  #ram_disk_id = "test"
-
   vpc_security_group_ids = [var.web_security_group_id]
 
   tag_specifications {
@@ -192,7 +181,6 @@ resource "aws_launch_template" "web_template" {
   }
   #user_data = filebase64("${path.module}/userdata.sh")
 }
-
 
 #App Target group
 resource "aws_lb_target_group" "app_instance_tg" {
@@ -218,7 +206,6 @@ resource "aws_lb_target_group" "app_instance_tg" {
     Environment = var.infra_env
   }
 }
-
 
 #Web Target group
 resource "aws_lb_target_group" "web_instance_tg" {
