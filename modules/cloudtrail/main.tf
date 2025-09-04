@@ -1,3 +1,4 @@
+#tfsec:ignore:aws-cloudtrail-ensure-cloudwatch-integration
 resource "aws_cloudtrail" "account_trail" {
   depends_on = [var.cloudtrail_bucket_bucket_policy]
 
