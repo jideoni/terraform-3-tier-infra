@@ -1,6 +1,8 @@
 provider "aws" {
-  profile = "terraform-admin" #role or user or user group
-  region  = var.region
+  #profile = "terraform-admin" #role or user or user group
+  profile = "TerraformAdmin1" #role or user or user group
+
+  region = var.region
 }
 
 # Configure the AWS Provider
