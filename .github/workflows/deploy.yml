@@ -48,6 +48,9 @@ jobs:
           mv tfsec /usr/local/bin/
           tfsec --version
 
+      - name: "go to terraform directory"
+        run: cd envs/dev
+
       - name: "Terraform Init"
         run: terraform init
 
@@ -64,9 +67,6 @@ jobs:
 
       - name: "tfsec"
         run: tfsec .
-
-      - name: "go to terraform directory"
-        run: cd envs/dev
 
       - name: "Terraform Plan"
         run: terraform plan -out=tfplan
