@@ -66,7 +66,7 @@ jobs:
           tflint
 
       - name: "tfsec"
-        run: tfsec .
+        run: tfsec /evns/dev
 
       - name: "Terraform Plan"
         run: terraform plan -out=tfplan
