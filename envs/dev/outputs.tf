@@ -29,7 +29,7 @@ output "ssm_s3_role_arn" {
 }
 
 output "flow_logs_s3_bucket" {
-  value = module.create_buckets.bucket_arn
+  value = module.create_buckets.vpc_flow_log_bucket_arn
 }
 
 output "db_sg" {

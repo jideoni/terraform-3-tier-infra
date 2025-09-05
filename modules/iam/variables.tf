@@ -3,6 +3,10 @@ variable "region" {
   default = "ca-central-1"
 }
 
+variable "kms_key_arn" {
+
+}
+
 variable "infra_env" {
   type        = string
   description = "infrastructure environment"
@@ -17,6 +21,8 @@ variable "ssm_and_s3_read_only_managed_policies" {
   ]
 }
 
+variable "cloudtrail_bucket_name" {} #id
+
 variable "code_bucket_arn" {}
 variable "cloudtrail_bucket_arn" {}
-variable "cloudtrail_bucket_name" {}
+variable "vpc_flow_log_bucket_arn" {}

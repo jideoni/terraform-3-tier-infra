@@ -1,9 +1,9 @@
 resource "aws_sns_topic" "notifications" {
   for_each = var.tier
 
-  name              = "${each.key}-sns-topic"
-  display_name      = "${each.key}-ASG-SNS"
-  kms_master_key_id = var.key_arn
+  name         = "${each.key}-sns-topic"
+  display_name = "${each.key}-ASG-SNS"
+  #kms_master_key_id = var.key_arn
 
   tags = {
     Name        = "${var.infra_env}-${each.key}-sns-topic"
@@ -47,9 +47,9 @@ data "aws_iam_policy_document" "allow_ASG_to_publish" {
 
 #Cloudwatch SNS setup
 resource "aws_sns_topic" "cloudwatch_notifications" {
-  name              = "${var.cloudwatch_sns}-sns-topic"
-  display_name      = "${var.cloudwatch_sns}-ASG-SNS"
-  kms_master_key_id = var.key_arn
+  name         = "${var.cloudwatch_sns}-sns-topic"
+  display_name = "${var.cloudwatch_sns}-ASG-SNS"
+  #kms_master_key_id = var.key_arn
 
   tags = {
     Name        = "${var.infra_env}-${var.cloudwatch_sns}-sns-topic"

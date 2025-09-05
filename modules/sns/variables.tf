@@ -1,6 +1,6 @@
 variable "region" {}
 variable "infra_env" {}
-variable "key_arn" {}
+#variable "key_arn" {}
 
 variable "tier" {
   type = map(string)

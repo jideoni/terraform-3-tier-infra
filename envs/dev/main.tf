@@ -2,7 +2,7 @@
 module "vpc_networking" {
   source     = "../../modules/networking"
   region     = var.region
-  bucket_arn = module.create_buckets.bucket_arn
+  bucket_arn = module.create_buckets.vpc_flow_log_bucket_arn
   infra_env  = var.infra_env
   vpc_cidr   = var.vpc_cidr_block
   azs        = var.azs
@@ -10,10 +10,10 @@ module "vpc_networking" {
 
 #create s3 buckets
 module "create_buckets" {
-  source      = "../../modules/s3"
-  infra_env   = var.infra_env
-  region      = var.region
-  kms_key_arn = module.kms.key_arn
+  source    = "../../modules/s3"
+  infra_env = var.infra_env
+  region    = var.region
+  #kms_key_arn = module.kms.key_arn
 }
 
 #Uncomment this section to launch DB
@@ -27,10 +27,13 @@ module "create_buckets" {
 }*/
 
 module "iam" {
-  source                 = "../../modules/iam"
-  cloudtrail_bucket_arn  = module.create_buckets.cloudtrail_bucket_arn
-  cloudtrail_bucket_name = module.create_buckets.cloudtrail_bucket_name
-  code_bucket_arn        = module.create_buckets.code_bucket_arn
+  source                  = "../../modules/iam"
+  cloudtrail_bucket_arn   = module.create_buckets.cloudtrail_bucket_arn
+  cloudtrail_bucket_name  = module.create_buckets.cloudtrail_bucket_name
+  code_bucket_arn         = module.create_buckets.code_bucket_arn
+  kms_key_arn             = module.kms.key_arn
+  vpc_flow_log_bucket_arn = module.create_buckets.vpc_flow_log_bucket_arn
+
 }
 
 module "ec2" {
@@ -54,7 +57,7 @@ module "ec2" {
   #desired_number            = var.instance_number_asg["desired"]
   #max_number                = var.instance_number_asg["max"]
   #min_number                = var.instance_number_asg["min"]
-  key_arn = module.kms.key_arn
+  #key_arn = module.kms.key_arn
 }
 
 module "sns" {
@@ -62,7 +65,7 @@ module "sns" {
   region            = var.region
   infra_env         = var.infra_env
   your_email_addres = var.your_email
-  key_arn           = module.kms.key_arn
+  #key_arn           = module.kms.key_arn
 }
 
 module "cloudwatch" {
@@ -91,7 +94,7 @@ module "cloudtrail" {
   infra_env                       = var.infra_env
   cloudtrail_bucket_name          = module.create_buckets.cloudtrail_bucket_name
   cloudtrail_bucket_bucket_policy = module.iam.cloudtrail_bucket_policy
-  key_arn                         = module.kms.key_arn
+  #key_arn                         = module.kms.key_arn
 }
 
 module "kms" {
