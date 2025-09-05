@@ -20,7 +20,7 @@ variable "azs" {
   default     = ["ca-central-1a", "ca-central-1b", "ca-central-1d"]
 }
 
-/*variable "instance_number_asg" {
+variable "instance_number_asg" {
   type = map(number)
 
   description = "Number of instances in ASG"
@@ -31,7 +31,7 @@ variable "azs" {
     "max"     = 3
     "min"     = 2
   }
-}*/
+}
 
 variable "your_email" {
   description = "the email address where you want notifications to go"

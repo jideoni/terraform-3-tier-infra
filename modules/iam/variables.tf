@@ -26,3 +26,8 @@ variable "cloudtrail_bucket_name" {} #id
 variable "code_bucket_arn" {}
 variable "cloudtrail_bucket_arn" {}
 variable "vpc_flow_log_bucket_arn" {}
+
+variable "app_topic" {}
+variable "web_topic" {}
+variable "cloudwatch_topic" {}
+variable "cloudtrail_arn" {}

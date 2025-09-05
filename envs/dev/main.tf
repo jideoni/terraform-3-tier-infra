@@ -33,7 +33,10 @@ module "iam" {
   code_bucket_arn         = module.create_buckets.code_bucket_arn
   kms_key_arn             = module.kms.key_arn
   vpc_flow_log_bucket_arn = module.create_buckets.vpc_flow_log_bucket_arn
-
+  app_topic               = module.sns.app_topic_arn
+  web_topic               = module.sns.web_topic_arn
+  cloudwatch_topic        = module.sns.cloudwatch_topic_arn
+  cloudtrail_arn          = module.cloudtrail.trail_arn
 }
 
 module "ec2" {
@@ -54,9 +57,9 @@ module "ec2" {
   ext_lb_security_group_id  = module.vpc_networking.external_lb_sg_id
   app_topic_arn             = module.sns.app_topic_arn
   web_topic_arn             = module.sns.web_topic_arn
-  #desired_number            = var.instance_number_asg["desired"]
-  #max_number                = var.instance_number_asg["max"]
-  #min_number                = var.instance_number_asg["min"]
+  desired_number            = var.instance_number_asg["desired"]
+  max_number                = var.instance_number_asg["max"]
+  min_number                = var.instance_number_asg["min"]
   #key_arn = module.kms.key_arn
 }
 

@@ -353,12 +353,9 @@ resource "aws_autoscaling_group" "app_asg" {
   vpc_zone_identifier       = var.all_app_subnets
   name                      = "${var.app_tier}-${var.infra_env}-asg"
   health_check_grace_period = 300
-  #desired_capacity    = var.desired_number
-  #max_size            = var.max_number
-  #min_size            = var.min_number
-  desired_capacity = 2
-  max_size         = 3
-  min_size         = 2
+  desired_capacity          = var.desired_number
+  max_size                  = var.max_number
+  min_size                  = var.min_number
 
   target_group_arns = [aws_lb_target_group.app_instance_tg.arn]
 
@@ -373,12 +370,9 @@ resource "aws_autoscaling_group" "web_asg" {
   vpc_zone_identifier       = var.all_web_subnets
   name                      = "${var.web_tier}-${var.infra_env}-asg"
   health_check_grace_period = 300
-  #desired_capacity    = var.desired_number
-  #max_size            = var.max_number
-  #min_size            = var.min_number
-  desired_capacity = 2
-  max_size         = 3
-  min_size         = 2
+  desired_capacity          = var.desired_number
+  max_size                  = var.max_number
+  min_size                  = var.min_number
 
   target_group_arns = [aws_lb_target_group.web_instance_tg.arn]
 

@@ -166,12 +166,56 @@ data "aws_iam_policy_document" "kms_policy_document" {
       "kms:GenerateDataKey*",
       "kms:DescribeKey"
     ]
-    resources = [var.code_bucket_arn,
+    resources = [
+      var.code_bucket_arn,
       var.cloudtrail_bucket_arn,
       var.vpc_flow_log_bucket_arn
     ]
   }
+
+  #Allow SNS
+  statement {
+    sid    = "allow SNS resources"
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["sns.amazonaws.com"]
+    }
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+    resources = [
+      var.app_topic,
+      var.web_topic,
+      var.cloudwatch_topic
+    ]
+  }
+
+  #Allow cloudtrail
+  statement {
+    sid    = "allow cloudtrail"
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudtrail.amazonaws.com"]
+    }
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+    resources = [
+      var.cloudtrail_arn
+    ]
+  }
 }
+
 
 resource "aws_kms_key_policy" "kms_key_policy" {
   key_id = var.kms_key_arn
