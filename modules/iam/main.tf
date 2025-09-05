@@ -1,3 +1,6 @@
+# Get the current AWS account ID
+data "aws_caller_identity" "current" {}
+
 resource "aws_iam_instance_profile" "app_ec2_instance_profile" {
   name = "app_ec2_instance_profile"
   role = aws_iam_role.app_ec2_access_s3_and_ssm.name
@@ -22,11 +25,11 @@ resource "aws_iam_role" "app_ec2_access_s3_and_ssm" {
 }
 
 # S3 read only
+#tfsec:ignore:aws-iam-no-policy-wildcards
 data "aws_iam_policy_document" "allow_access_to_s3_policy_document" {
   statement {
     effect = "Allow"
     actions = [
-      #tfsec:ignore:aws-iam-no-policy-wildcards
       /*"s3:Get*",
       "s3:List*",
       "s3:Describe*",
@@ -117,17 +120,29 @@ resource "aws_s3_bucket_policy" "cloudtrail_bucket_policy" {
   policy = data.aws_iam_policy_document.allow_cloudtrail_policy_document.json
 }
 
+# Common KMS Actions (local variable)
+
+locals {
+  kms_common_actions = [
+    "kms:CreateGrant",
+    "kms:Decrypt",
+    "kms:DescribeKey",
+    "kms:GenerateDataKeyWithoutPlainText",
+    "kms:ReEncrypt*"
+  ]
+}
 
 #KMS Key policy
 data "aws_iam_policy_document" "kms_policy_document" {
   #Grant root user all permissions
   statement {
-    sid    = "Enable IAM user permission"
+    sid    = "AllowRootFullAccess"
     effect = "Allow"
 
     principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::380255901104:root"]
+      type = "AWS"
+      #identifiers = ["arn:aws:iam::380255901104:root"]
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
     }
 
     actions   = ["kms:*"]
@@ -144,32 +159,29 @@ data "aws_iam_policy_document" "kms_policy_document" {
       identifiers = ["ec2.amazonaws.com"]
     }
 
-    actions = [
+    /*actions = [
       "kms:CreateGrant",
       "kms:Decrypt",
       "kms:DescribeKey",
       "kms:GenerateDataKeyWithoutPlainText",
       "kms:ReEncrypt"
-    ]
-    resources = ["arn:aws:ec2:ca-central-1:380255901104:instance/*"]
+    ]*/
+    actions   = local.kms_common_actions
+    resources = ["*"] #all EC2 instances
   }
 
   #Allow S3
   statement {
-    sid    = "allow S3 resources"
+    sid    = "AllowS3"
     effect = "Allow"
 
     principals {
       type        = "Service"
       identifiers = ["s3.amazonaws.com"]
     }
-    actions = [
-      "kms:CreateGrant",
-      "kms:Decrypt",
-      "kms:DescribeKey",
-      "kms:GenerateDataKeyWithoutPlainText",
-      "kms:ReEncrypt"
-    ]
+
+    actions = local.kms_common_actions
+
     resources = [
       var.code_bucket_arn,
       var.cloudtrail_bucket_arn,
@@ -179,20 +191,16 @@ data "aws_iam_policy_document" "kms_policy_document" {
 
   #Allow SNS
   statement {
-    sid    = "allow SNS resources"
+    sid    = "AllowSNS"
     effect = "Allow"
 
     principals {
       type        = "Service"
       identifiers = ["sns.amazonaws.com"]
     }
-    actions = [
-      "kms:CreateGrant",
-      "kms:Decrypt",
-      "kms:DescribeKey",
-      "kms:GenerateDataKeyWithoutPlainText",
-      "kms:ReEncrypt"
-    ]
+
+    actions = local.kms_common_actions
+
     resources = [
       var.app_topic,
       var.web_topic,
@@ -202,20 +210,16 @@ data "aws_iam_policy_document" "kms_policy_document" {
 
   #Allow cloudtrail
   statement {
-    sid    = "allow cloudtrail"
+    sid    = "AllowCloudtrail"
     effect = "Allow"
 
     principals {
       type        = "Service"
       identifiers = ["cloudtrail.amazonaws.com"]
     }
-    actions = [
-      "kms:CreateGrant",
-      "kms:Decrypt",
-      "kms:DescribeKey",
-      "kms:GenerateDataKeyWithoutPlainText",
-      "kms:ReEncrypt"
-    ]
+
+    actions = local.kms_common_actions
+
     resources = [
       var.cloudtrail_arn
     ]
@@ -223,20 +227,16 @@ data "aws_iam_policy_document" "kms_policy_document" {
 
   #Allow ASGs
   statement {
-    sid    = "allow ASGs"
+    sid    = "allowASG"
     effect = "Allow"
 
     principals {
       type        = "Service"
       identifiers = ["autoscaling.amazonaws.com"]
     }
-    actions = [
-      "kms:CreateGrant",
-      "kms:Decrypt",
-      "kms:DescribeKey",
-      "kms:GenerateDataKeyWithoutPlainText",
-      "kms:ReEncrypt"
-    ]
+
+    actions = local.kms_common_actions
+
     resources = [
       var.web_asg_arn,
       var.app_asg_arn

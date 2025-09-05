@@ -10,10 +10,10 @@ module "vpc_networking" {
 
 #create s3 buckets
 module "create_buckets" {
-  source    = "../../modules/s3"
-  infra_env = var.infra_env
-  region    = var.region
-  #kms_key_arn = module.kms.key_arn
+  source      = "../../modules/s3"
+  infra_env   = var.infra_env
+  region      = var.region
+  kms_key_arn = module.kms.key_arn
 }
 
 #Uncomment this section to launch DB
@@ -62,7 +62,7 @@ module "ec2" {
   desired_number            = var.instance_number_asg["desired"]
   max_number                = var.instance_number_asg["max"]
   min_number                = var.instance_number_asg["min"]
-  #key_arn = module.kms.key_arn
+  key_arn                   = module.kms.key_arn
 }
 
 module "sns" {
@@ -70,7 +70,7 @@ module "sns" {
   region            = var.region
   infra_env         = var.infra_env
   your_email_addres = var.your_email
-  #key_arn           = module.kms.key_arn
+  key_arn           = module.kms.key_arn
 }
 
 module "cloudwatch" {
@@ -99,7 +99,7 @@ module "cloudtrail" {
   infra_env                       = var.infra_env
   cloudtrail_bucket_name          = module.create_buckets.cloudtrail_bucket_name
   cloudtrail_bucket_bucket_policy = module.iam.cloudtrail_bucket_policy
-  #key_arn                         = module.kms.key_arn
+  key_arn                         = module.kms.key_arn
 }
 
 module "kms" {

@@ -4,7 +4,7 @@ variable "vpc_id" {}
 
 variable "infra_env" {}
 
-#variable "key_arn" {}
+variable "key_arn" {}
 
 variable "app_tier" {
   type    = string
