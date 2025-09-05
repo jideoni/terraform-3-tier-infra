@@ -51,9 +51,6 @@ jobs:
           mv tfsec /usr/local/bin/
           tfsec --version
 
-      - name: "go to terraform directory"
-        run: cd envs/dev
-
       - name: "Terraform Init"
         run: terraform init
 
