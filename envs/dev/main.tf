@@ -37,6 +37,8 @@ module "iam" {
   web_topic               = module.sns.web_topic_arn
   cloudwatch_topic        = module.sns.cloudwatch_topic_arn
   cloudtrail_arn          = module.cloudtrail.trail_arn
+  app_asg_arn             = module.ec2.app_asg_arn
+  web_asg_arn             = module.ec2.web_asg_arn
 }
 
 module "ec2" {

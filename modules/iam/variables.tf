@@ -31,3 +31,6 @@ variable "app_topic" {}
 variable "web_topic" {}
 variable "cloudwatch_topic" {}
 variable "cloudtrail_arn" {}
+
+variable "app_asg_arn" {}
+variable "web_asg_arn" {}

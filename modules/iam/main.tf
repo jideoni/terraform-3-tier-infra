@@ -26,18 +26,18 @@ data "aws_iam_policy_document" "allow_access_to_s3_policy_document" {
   statement {
     effect = "Allow"
     actions = [
-      "s3:Get*",
+      /*"s3:Get*",
       "s3:List*",
       "s3:Describe*",
       "s3-object-lambda:Get*",
-      "s3-object-lambda:List*"
+      "s3-object-lambda:List*"*/
 
-      #"s3:GetObjects",
-      #"s3:ListBucket",
-      #"s3:ListAllMyBuckets"
-      #"s3:Describe*",
-      #"s3-object-lambda:Get*",
-      #"s3-object-lambda:List*"
+      "s3:GetObjects",
+      "s3:ListBucket",
+      "s3:ListAllMyBuckets",
+      "s3:Describe*",
+      "s3-object-lambda:Get*",
+      "s3-object-lambda:List*"
     ]
     resources = [var.code_bucket_arn]
   }
@@ -50,6 +50,7 @@ resource "aws_iam_policy" "allow_access_to_s3_policy" {
 }
 
 # KMS_key
+#tfsec:ignore:aws-iam-no-policy-wildcards
 data "aws_iam_policy_document" "allow_to_use_kms_key" {
   statement {
     effect = "Allow"
@@ -143,10 +144,11 @@ data "aws_iam_policy_document" "kms_policy_document" {
     }
 
     actions = [
-      "kms:Encrypt",
+      "kms:CreateGrant",
       "kms:Decrypt",
-      "kms:GenerateDataKey*",
-      "kms:DescribeKey"
+      "kms:DescribeKey",
+      "kms:GenerateDataKeyWithoutPlainText",
+      "kms:ReEncrypt"
     ]
     resources = ["arn:aws:ec2:ca-central-1:380255901104:instance/*"]
   }
@@ -161,10 +163,11 @@ data "aws_iam_policy_document" "kms_policy_document" {
       identifiers = ["s3.amazonaws.com"]
     }
     actions = [
-      "kms:Encrypt",
+      "kms:CreateGrant",
       "kms:Decrypt",
-      "kms:GenerateDataKey*",
-      "kms:DescribeKey"
+      "kms:DescribeKey",
+      "kms:GenerateDataKeyWithoutPlainText",
+      "kms:ReEncrypt"
     ]
     resources = [
       var.code_bucket_arn,
@@ -183,10 +186,11 @@ data "aws_iam_policy_document" "kms_policy_document" {
       identifiers = ["sns.amazonaws.com"]
     }
     actions = [
-      "kms:Encrypt",
+      "kms:CreateGrant",
       "kms:Decrypt",
-      "kms:GenerateDataKey*",
-      "kms:DescribeKey"
+      "kms:DescribeKey",
+      "kms:GenerateDataKeyWithoutPlainText",
+      "kms:ReEncrypt"
     ]
     resources = [
       var.app_topic,
@@ -205,17 +209,39 @@ data "aws_iam_policy_document" "kms_policy_document" {
       identifiers = ["cloudtrail.amazonaws.com"]
     }
     actions = [
-      "kms:Encrypt",
+      "kms:CreateGrant",
       "kms:Decrypt",
-      "kms:GenerateDataKey*",
-      "kms:DescribeKey"
+      "kms:DescribeKey",
+      "kms:GenerateDataKeyWithoutPlainText",
+      "kms:ReEncrypt"
     ]
     resources = [
       var.cloudtrail_arn
     ]
   }
-}
 
+  #Allow ASGs
+  statement {
+    sid    = "allow ASGs"
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["autoscaling.amazonaws.com"]
+    }
+    actions = [
+      "kms:CreateGrant",
+      "kms:Decrypt",
+      "kms:DescribeKey",
+      "kms:GenerateDataKeyWithoutPlainText",
+      "kms:ReEncrypt"
+    ]
+    resources = [
+      var.web_asg_arn,
+      var.app_asg_arn
+    ]
+  }
+}
 
 resource "aws_kms_key_policy" "kms_key_policy" {
   key_id = var.kms_key_arn

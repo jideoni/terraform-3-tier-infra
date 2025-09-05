@@ -29,3 +29,11 @@ output "ext_alb_public_ip" {
 output "ext_alb_zone_id" {
   value = aws_lb.external_lb.zone_id
 }
+
+output "app_asg_arn" {
+  value = aws_autoscaling_group.app_asg.arn
+}
+
+output "web_asg_arn" {
+  value = aws_autoscaling_group.web_asg.arn
+}
