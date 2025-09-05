@@ -94,9 +94,11 @@ resource "aws_subnet" "web" {
   #newbits is the number of additional bits with which to extend the prefix. For example,
   #if given a prefix ending in /16 and a newbits value of 4,
   #the resulting subnet address will have length /20.
-  cidr_block              = cidrsubnet(aws_vpc.ruby_vpc.cidr_block, 4, each.value)
-  availability_zone       = each.key
-  map_public_ip_on_launch = true
+  cidr_block        = cidrsubnet(aws_vpc.ruby_vpc.cidr_block, 4, each.value)
+  availability_zone = each.key
+
+  #####################
+  map_public_ip_on_launch = false
 
   tags = {
     Name        = "${var.infra_env}-web-subnet-${each.key}"

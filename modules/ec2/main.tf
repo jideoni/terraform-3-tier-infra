@@ -7,10 +7,10 @@ resource "aws_instance" "app" {
   vpc_security_group_ids = [var.app_security_group_id]
   subnet_id              = var.subnet_app
 
-  /*metadata_options {
+  metadata_options {
     http_tokens   = "required"
     http_endpoint = "enabled"
-  }*/
+  }
 
   /*root_block_device {
     delete_on_termination = true
@@ -35,10 +35,10 @@ resource "aws_instance" "web" {
   vpc_security_group_ids = [var.web_security_group_id]
   subnet_id              = var.subnet_web
 
-  /*metadata_options {
+  metadata_options {
     http_tokens   = "required"
     http_endpoint = "enabled"
-  }*/
+  }
 
   /*root_block_device {
     delete_on_termination = true
@@ -116,12 +116,12 @@ resource "aws_launch_template" "app_template" {
 
   instance_type = var.instance_type_web_and_app
 
-  /*metadata_options {
+  metadata_options {
     http_endpoint               = "enabled"
     http_tokens                 = "required"
     http_put_response_hop_limit = 1
     instance_metadata_tags      = "enabled"
-  }*/
+  }
 
   monitoring {
     enabled = true
@@ -180,12 +180,12 @@ resource "aws_launch_template" "web_template" {
 
   instance_type = var.instance_type_web_and_app
 
-  /*metadata_options {
+  metadata_options {
     http_endpoint               = "enabled"
     http_tokens                 = "required"
     http_put_response_hop_limit = 1
     instance_metadata_tags      = "enabled"
-  }*/
+  }
 
   monitoring {
     enabled = true
@@ -256,10 +256,10 @@ resource "aws_lb_target_group" "web_instance_tg" {
 
 #app alb
 resource "aws_lb" "internal_lb" {
-  name               = "alb-internal"
-  internal           = true
-  load_balancer_type = "application"
-  #drop_invalid_header_fields = true
+  name                       = "alb-internal"
+  internal                   = true
+  load_balancer_type         = "application"
+  drop_invalid_header_fields = true
 
   security_groups = [var.int_lb_security_group_id]
   subnets         = toset(var.all_app_subnets)
@@ -276,9 +276,9 @@ resource "aws_lb" "internal_lb" {
 resource "aws_lb" "external_lb" {
   name = "alb-external"
   #tfsec:ignore:aws-elb-alb-not-public
-  internal           = false #internet facing
-  load_balancer_type = "application"
-  #drop_invalid_header_fields = true
+  internal                   = false #internet facing
+  load_balancer_type         = "application"
+  drop_invalid_header_fields = true
 
   security_groups = [var.ext_lb_security_group_id]
   subnets         = toset(var.all_web_subnets)

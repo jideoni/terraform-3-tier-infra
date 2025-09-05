@@ -26,6 +26,7 @@ data "aws_iam_policy_document" "allow_access_to_s3_policy_document" {
   statement {
     effect = "Allow"
     actions = [
+      #tfsec:ignore:aws-iam-no-policy-wildcards
       /*"s3:Get*",
       "s3:List*",
       "s3:Describe*",
