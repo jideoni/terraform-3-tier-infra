@@ -53,17 +53,23 @@ resource "aws_iam_policy" "allow_access_to_s3_policy" {
   policy      = data.aws_iam_policy_document.allow_access_to_s3_policy_document.json
 }
 
+# Common KMS Actions (local variable)
+locals {
+  kms_common_actions = [
+    "kms:CreateGrant",
+    "kms:Decrypt",
+    "kms:DescribeKey",
+    "kms:GenerateDataKeyWithoutPlainText",
+    "kms:ReEncrypt*"
+  ]
+}
+
 # KMS_key
 #tfsec:ignore:aws-iam-no-policy-wildcards
 data "aws_iam_policy_document" "allow_to_use_kms_key" {
   statement {
-    effect = "Allow"
-    actions = [
-      "kms:Encrypt",
-      "kms:Decrypt",
-      "kms:GenerateDataKey*",
-      "kms:DescribeKey"
-    ]
+    effect    = "Allow"
+    actions   = local.kms_common_actions
     resources = [var.kms_key_arn]
   }
 }
@@ -118,18 +124,6 @@ data "aws_iam_policy_document" "allow_cloudtrail_policy_document" {
 resource "aws_s3_bucket_policy" "cloudtrail_bucket_policy" {
   bucket = var.cloudtrail_bucket_name
   policy = data.aws_iam_policy_document.allow_cloudtrail_policy_document.json
-}
-
-# Common KMS Actions (local variable)
-
-locals {
-  kms_common_actions = [
-    "kms:CreateGrant",
-    "kms:Decrypt",
-    "kms:DescribeKey",
-    "kms:GenerateDataKeyWithoutPlainText",
-    "kms:ReEncrypt*"
-  ]
 }
 
 #KMS Key policy
