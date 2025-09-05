@@ -12,11 +12,11 @@ resource "aws_instance" "app" {
     http_endpoint = "enabled"
   }
 
-  /*root_block_device {
+  root_block_device {
     delete_on_termination = true
     encrypted             = true
     kms_key_id            = var.key_arn
-  }*/
+  }
 
   user_data = file("${path.module}/userdataapp.sh")
 
@@ -40,11 +40,11 @@ resource "aws_instance" "web" {
     http_endpoint = "enabled"
   }
 
-  /*root_block_device {
+  root_block_device {
     delete_on_termination = true
     encrypted             = true
     kms_key_id            = var.key_arn
-  }*/
+  }
 
   user_data = file("${path.module}/userdataweb.sh")
 
