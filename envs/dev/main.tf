@@ -20,9 +20,7 @@ module "create_buckets" {
 /*module "rds" {
   source = "../../modules/rds"
   key_arn           = module.kms.key_arn
-
-  db_sg = keys(module.vpc_networking.security_groups_created)[4]
-
+  db_sg = module.vpc_networking.db_sg_id
   subnet_ids = keys(module.vpc_networking.vpc_db_subnets)
 }*/
 

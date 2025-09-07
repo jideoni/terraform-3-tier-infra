@@ -3,6 +3,9 @@ resource "aws_s3_bucket" "buckets" {
   for_each = var.bucket_name
 
   bucket = "${each.key}-jyde"
+
+  #buckets will not get destroyed when you run terraform destroy
+  #delete manually
   #force_destroy = true
 
   tags = {

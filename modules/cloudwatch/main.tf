@@ -12,7 +12,7 @@ resource "aws_cloudwatch_metric_alarm" "app_asg_cpu_alarm" {
     AutoScalingGroupName = var.app_asg_name
   }
 
-  alarm_description = "This metric monitors ec2 cpu utilization"
+  alarm_description = "This metric monitors ec2 cpu utilization in app ASG"
   alarm_actions     = [var.app_asg_policy_arn, var.cloudwatch_sns_arn]
 }
 
@@ -30,6 +30,6 @@ resource "aws_cloudwatch_metric_alarm" "web_asg_cpu_alarm" {
     AutoScalingGroupName = var.app_asg_name
   }
 
-  alarm_description = "This metric monitors ec2 cpu utilization"
+  alarm_description = "This metric monitors ec2 cpu utilization in web ASG"
   alarm_actions     = [var.web_asg_policy_arn, var.cloudwatch_sns_arn]
 }
