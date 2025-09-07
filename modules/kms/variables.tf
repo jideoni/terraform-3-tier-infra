@@ -13,5 +13,5 @@ variable "cloudtrail_arn" {}
 
 variable "alias" {
   type    = string
-  default = "rubydevkey"
+  default = "alias/rubydevkey"
 }
