@@ -98,6 +98,7 @@ resource "aws_subnet" "web" {
   availability_zone = each.key
 
   #####################
+  #tfsec:ignore:aws-ec2-no-public-ip-subnet
   map_public_ip_on_launch = true
 
   tags = {
