@@ -265,7 +265,8 @@ resource "aws_security_group" "security_groups" {
   description = each.value
 
   tags = {
-    Name = "ruby-${each.key}"
+    Name        = "ruby-${each.key}"
+    Environment = var.infra_env
   }
 }
 
@@ -329,13 +330,6 @@ resource "aws_vpc_security_group_ingress_rule" "app-SG-rule-ping" {
   to_port                      = 0
 }
 
-resource "aws_vpc_security_group_egress_rule" "allow_all_traffic" {
-  for_each = var.security_groups
-
-  security_group_id = aws_security_group.security_groups[each.key].id
-  cidr_ipv4         = var.internet
-  ip_protocol       = "-1" # all ports
-}
 
 resource "aws_vpc_security_group_ingress_rule" "db-SG-rule" {
   security_group_id            = aws_security_group.security_groups["db-SG"].id
@@ -343,4 +337,19 @@ resource "aws_vpc_security_group_ingress_rule" "db-SG-rule" {
   from_port                    = 3306                                            #mysql
   ip_protocol                  = var.tcp
   to_port                      = 3306
+}
+resource "aws_vpc_security_group_ingress_rule" "db-SG-rule_ping" {
+  security_group_id            = aws_security_group.security_groups["db-SG"].id
+  referenced_security_group_id = aws_security_group.security_groups["app-SG"].id # allow traffic from external ALB security group only
+  from_port                    = 8                                               #Echo Request
+  ip_protocol                  = var.icmp
+  to_port                      = 0
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_all_traffic" {
+  for_each = var.security_groups
+
+  security_group_id = aws_security_group.security_groups[each.key].id
+  cidr_ipv4         = var.internet
+  ip_protocol       = "-1" # all ports
 }
