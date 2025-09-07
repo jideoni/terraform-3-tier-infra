@@ -4,4 +4,10 @@ resource "aws_kms_key" "ruby-dev-mykey" {
   is_enabled              = true
   rotation_period_in_days = 91
   deletion_window_in_days = 10
+  #policy                  = data.aws_iam_policy_document.kms_policy_document
+}
+
+resource "aws_kms_alias" "ruby_dev_key_alias" {
+  name          = var.alias
+  target_key_id = aws_kms_key.ruby-dev-mykey.key_id
 }

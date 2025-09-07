@@ -90,3 +90,11 @@ output "external_lb_sg" {
   description = "External ALB SG"
   value       = module.vpc_networking.external_lb_sg_id
 }
+
+output "kms_key_id" {
+  value = module.kms.key_id
+}
+
+output "kms_key_arn" {
+  value = module.kms.key_arn
+}

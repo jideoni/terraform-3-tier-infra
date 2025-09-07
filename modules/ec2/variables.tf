@@ -25,6 +25,7 @@ variable "amazon_linux_2023_ami" {
 variable "instance_type_web_and_app" {}
 
 variable "instance_profile" {}
+variable "instance_profile_arn" {}
 
 variable "app_security_group_id" {}
 

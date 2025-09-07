@@ -56,11 +56,11 @@ resource "aws_iam_policy" "allow_access_to_s3_policy" {
 # Common KMS Actions (local variable)
 locals {
   kms_common_actions = [
-    "kms:CreateGrant",
+    "kms:Encrypt",
     "kms:Decrypt",
-    "kms:DescribeKey",
-    "kms:GenerateDataKeyWithoutPlainText",
-    "kms:ReEncrypt*"
+    "kms:ReEncrypt*",
+    "kms:GenerateDataKey*",
+    "kms:DescribeKey"
   ]
 }
 
@@ -70,7 +70,9 @@ data "aws_iam_policy_document" "allow_to_use_kms_key" {
   statement {
     effect    = "Allow"
     actions   = local.kms_common_actions
-    resources = [var.kms_key_arn]
+    resources = ["*"]
+
+    #resources = [var.kms_key_arn]
   }
 }
 
@@ -145,23 +147,15 @@ data "aws_iam_policy_document" "kms_policy_document" {
 
   #Allow EC2
   statement {
-    sid    = "allow ec2 resources"
+    sid    = "AllowEC2"
     effect = "Allow"
 
     principals {
       type        = "Service"
       identifiers = ["ec2.amazonaws.com"]
     }
-
-    /*actions = [
-      "kms:CreateGrant",
-      "kms:Decrypt",
-      "kms:DescribeKey",
-      "kms:GenerateDataKeyWithoutPlainText",
-      "kms:ReEncrypt"
-    ]*/
     actions   = local.kms_common_actions
-    resources = ["*"] #all EC2 instances
+    resources = ["*"]
   }
 
   #Allow S3
@@ -174,13 +168,8 @@ data "aws_iam_policy_document" "kms_policy_document" {
       identifiers = ["s3.amazonaws.com"]
     }
 
-    actions = local.kms_common_actions
-
-    resources = [
-      var.code_bucket_arn,
-      var.cloudtrail_bucket_arn,
-      var.vpc_flow_log_bucket_arn
-    ]
+    actions   = local.kms_common_actions
+    resources = ["*"]
   }
 
   #Allow SNS
@@ -193,13 +182,8 @@ data "aws_iam_policy_document" "kms_policy_document" {
       identifiers = ["sns.amazonaws.com"]
     }
 
-    actions = local.kms_common_actions
-
-    resources = [
-      var.app_topic,
-      var.web_topic,
-      var.cloudwatch_topic
-    ]
+    actions   = local.kms_common_actions
+    resources = ["*"]
   }
 
   #Allow cloudtrail
@@ -212,33 +196,43 @@ data "aws_iam_policy_document" "kms_policy_document" {
       identifiers = ["cloudtrail.amazonaws.com"]
     }
 
-    actions = local.kms_common_actions
-
-    resources = [
-      var.cloudtrail_arn
-    ]
+    #actions = local.kms_common_actions
+    actions   = ["kms:*"]
+    resources = ["*"]
   }
 
   #Allow ASGs
   statement {
-    sid    = "allowASG"
+    sid    = "Allow Auto Scaling to use the key"
     effect = "Allow"
-
     principals {
-      type        = "Service"
-      identifiers = ["autoscaling.amazonaws.com"]
+      type = "AWS"
+      #identifiers = ["arn:aws:iam::380255901104:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"]
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"]
     }
-
-    actions = local.kms_common_actions
-
-    resources = [
-      var.web_asg_arn,
-      var.app_asg_arn
+    actions   = local.kms_common_actions
+    resources = ["*"]
+  }
+  statement {
+    sid    = "Allow attachment of persistent resources"
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"]
+    }
+    actions = [
+      "kms:CreateGrant"
     ]
+    resources = ["*"]
+    condition {
+      test     = "Bool"
+      variable = "kms:GrantIsForAWSResource"
+      values   = ["true"]
+    }
   }
 }
 
 resource "aws_kms_key_policy" "kms_key_policy" {
-  key_id = var.kms_key_arn
+  key_id = var.kms_key_id
   policy = data.aws_iam_policy_document.kms_policy_document.json
 }

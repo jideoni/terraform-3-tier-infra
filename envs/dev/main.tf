@@ -32,6 +32,7 @@ module "iam" {
   cloudtrail_bucket_name  = module.create_buckets.cloudtrail_bucket_name
   code_bucket_arn         = module.create_buckets.code_bucket_arn
   kms_key_arn             = module.kms.key_arn
+  kms_key_id              = module.kms.key_id
   vpc_flow_log_bucket_arn = module.create_buckets.vpc_flow_log_bucket_arn
   app_topic               = module.sns.app_topic_arn
   web_topic               = module.sns.web_topic_arn
@@ -41,12 +42,27 @@ module "iam" {
   web_asg_arn             = module.ec2.web_asg_arn
 }
 
+module "kms" {
+  source    = "../../modules/kms"
+  region    = var.region
+  infra_env = var.infra_env
+  app_topic = module.sns.app_topic_arn
+  web_topic = module.sns.web_topic_arn
+
+  cloudwatch_topic        = module.sns.cloudwatch_topic_arn
+  cloudtrail_arn          = module.cloudtrail.trail_arn
+  cloudtrail_bucket_arn   = module.create_buckets.cloudtrail_bucket_arn
+  code_bucket_arn         = module.create_buckets.code_bucket_arn
+  vpc_flow_log_bucket_arn = module.create_buckets.vpc_flow_log_bucket_arn
+}
+
 module "ec2" {
   source                    = "../../modules/ec2"
   region                    = var.region
   vpc_id                    = module.vpc_networking.vpc_id
   infra_env                 = var.infra_env
   instance_profile          = module.iam.instance_profile
+  instance_profile_arn      = module.iam.instance_profile_arn
   instance_type_web_and_app = var.instance_type_web_and_app
   code_bucket_name          = module.create_buckets.code_bucket_name
   subnet_app                = keys(module.vpc_networking.vpc_private_subnets)[0]
@@ -100,10 +116,4 @@ module "cloudtrail" {
   cloudtrail_bucket_name          = module.create_buckets.cloudtrail_bucket_name
   cloudtrail_bucket_bucket_policy = module.iam.cloudtrail_bucket_policy
   key_arn                         = module.kms.key_arn
-}
-
-module "kms" {
-  source    = "../../modules/kms"
-  region    = var.region
-  infra_env = var.infra_env
 }

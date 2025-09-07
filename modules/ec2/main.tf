@@ -137,7 +137,7 @@ resource "aws_launch_template" "app_template" {
       Environment = var.infra_env
     }
   }
-  #user_data = filebase64("${path.module}/userdata.sh")
+  user_data = filebase64("${path.module}/userdataapp.sh")
 }
 
 #web launch template
@@ -201,7 +201,7 @@ resource "aws_launch_template" "web_template" {
       Environment = var.infra_env
     }
   }
-  #user_data = filebase64("${path.module}/userdata.sh")
+  user_data = filebase64("${path.module}/userdataweb.sh")
 }
 
 #App Target group
@@ -363,6 +363,7 @@ resource "aws_autoscaling_group" "app_asg" {
     id      = aws_launch_template.app_template.id
     version = "$Latest"
   }
+
 }
 
 #web Auto Scaling group

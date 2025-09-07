@@ -1,4 +1,9 @@
 output "key_arn" {
-  description = "The ARN of WEB SNS topics"
+  description = "ARN of the KMS key"
   value       = aws_kms_key.ruby-dev-mykey.arn
+}
+
+output "key_id" {
+  description = "ID of the KMS key"
+  value       = aws_kms_key.ruby-dev-mykey.id
 }
