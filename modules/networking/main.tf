@@ -98,7 +98,7 @@ resource "aws_subnet" "web" {
   availability_zone = each.key
 
   #####################
-  map_public_ip_on_launch = false
+  map_public_ip_on_launch = true
 
   tags = {
     Name        = "${var.infra_env}-web-subnet-${each.key}"
