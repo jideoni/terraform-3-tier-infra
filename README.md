@@ -1,5 +1,10 @@
-Terraform modules to set up and a highly available, fault-tolerant, secure, and scalable 3-tier web app infrastructure on AWS.
-Each environment has over 90 resources to support your App.
+Terraform modules to set up and a highly available, fault-tolerant, secure, and scalable 3-tier infrastructure on AWS.
+Each environment has over 100 resources to support your App.
+
+Cloud Environment: AWS
+IaC: Terraform
+CI/CD pipeline: Git Actions
+
 The setup is as follows:
 Frontend: NGINX + NodeJS (React)
 Backend: React + MySQL
@@ -16,6 +21,7 @@ Your email address to receive notifications
 Your S3 bucket name
 
 Components created
+
 1. VPC
 2. Internet gateway
 3. NAT gateway x 3
@@ -23,7 +29,7 @@ Components created
 5. subnets x 9 = web x 3, app x 3, db x 3
 6. security groups x 5
 7. RDS subnet group
-8. Multi-AZ RDS (Aurora MySQL) *comment out RDS module block in envs/dev/main.tf
+8. Multi-AZ RDS (Aurora MySQL) \*comment out RDS module block in envs/dev/main.tf
 9. S3 buckets x 3
 10. SNS topics and subscription
 11. IAM policies and policy documents
@@ -35,3 +41,4 @@ Components created
 17. Route53 hosted zone
 18. CloudTrail
 19. CloudWatch Alarms and others
+20. Secrets Manager
