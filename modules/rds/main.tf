@@ -1,3 +1,11 @@
+data "aws_secretsmanager_secret" "dbcreds" {
+  name = "ruby/web/admindb"
+}
+
+data "aws_secretsmanager_secret_version" "secret_credentials" {
+  secret_id = data.aws_secretsmanager_secret.dbcreds.id
+}
+
 resource "aws_db_subnet_group" "ruby_db_subnet_group" {
   name       = var.subnet_group_name
   subnet_ids = var.subnet_ids
@@ -19,8 +27,8 @@ resource "aws_rds_cluster" "rds_cluster_dev" {
 
   availability_zones      = var.azs
   database_name           = var.rds_name
-  master_username         = "admin"
-  master_password         = "admin12345"
+  master_username         = jsondecode(data.aws_secretsmanager_secret_version.secret_credentials.secret_string)["name"]
+  master_password         = jsondecode(data.aws_secretsmanager_secret_version.secret_credentials.secret_string)["password"]
   backup_retention_period = var.backup_retention_period
   preferred_backup_window = "07:00-09:00"
   db_subnet_group_name    = aws_db_subnet_group.ruby_db_subnet_group.name

@@ -54,3 +54,7 @@ output "app_sg_id" {
 output "web_sg_id" {
   value = aws_security_group.security_groups["web-SG"].id
 }
+
+output "db_sg_id" {
+  value = aws_security_group.security_groups["db-SG"].id
+}
