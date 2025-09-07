@@ -4,6 +4,9 @@ Each environment has over 100 resources to support your App.
 Cloud Environment: AWS
 IaC: Terraform
 CI/CD pipeline: Git Actions
+tflint for automatic script examinination to identify potential issues, errors, and deviations from best practices.
+
+tfsec for static security analysis and scanning
 
 The setup is as follows:
 Frontend: NGINX + NodeJS (React)
