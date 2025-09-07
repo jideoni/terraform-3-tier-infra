@@ -21,7 +21,7 @@ resource "aws_instance" "app" {
   user_data = file("${path.module}/userdataapp.sh")
 
   tags = {
-    Name        = "${var.app_tier}-template"
+    Name        = "${var.app_tier}-template-update"
     Environment = var.infra_env
   }
 }
@@ -49,7 +49,7 @@ resource "aws_instance" "web" {
   user_data = file("${path.module}/userdataweb.sh")
 
   tags = {
-    Name        = "${var.web_tier}-template"
+    Name        = "${var.web_tier}-template-update"
     Environment = var.infra_env
   }
 }
