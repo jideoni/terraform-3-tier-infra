@@ -27,7 +27,7 @@ resource "aws_cloudwatch_metric_alarm" "web_asg_cpu_alarm" {
   threshold           = 80
 
   dimensions = {
-    AutoScalingGroupName = var.app_asg_name
+    AutoScalingGroupName = var.web_asg_name
   }
 
   alarm_description = "This metric monitors ec2 cpu utilization in web ASG"
