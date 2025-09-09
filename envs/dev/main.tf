@@ -1,3 +1,25 @@
+resource "aws_route53_zone" "jideweb_zone" {
+  name = "jideweb.click"
+}
+
+#import existing zone
+import {
+  to = aws_route53_zone.jideweb_zone
+  id = var.zone_id # Replace with your actual Hosted Zone ID when you run terraform plan
+}
+
+resource "aws_route53_record" "www" {
+  zone_id = aws_route53_zone.jideweb_zone.id
+  name    = "ruby"
+  type    = "A"
+
+  alias {
+    name                   = module.ec2.ext_alb_public_ip
+    zone_id                = module.ec2.ext_alb_zone_id
+    evaluate_target_health = true
+  }
+}
+
 #set up the vpc and network components
 module "vpc_networking" {
   source     = "../../modules/networking"

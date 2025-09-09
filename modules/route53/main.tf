@@ -1,8 +1,4 @@
-resource "aws_route53_zone" "jideweb_zone" {
-  name = "ruby.click"
-}
-
-resource "aws_route53_record" "www" {
+/*resource "aws_route53_record" "www" {
   zone_id = aws_route53_zone.jideweb_zone.id
   name    = "www.ruby.click"
   type    = "A"
@@ -13,3 +9,4 @@ resource "aws_route53_record" "www" {
     evaluate_target_health = true
   }
 }
+*/
