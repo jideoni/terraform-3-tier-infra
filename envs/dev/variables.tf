@@ -50,8 +50,3 @@ variable "zone_id" {
   description = "Your Zone ID, eg: Z01409********"
   type        = string
 } #id of the existing zone you want to import
-
-variable "tfstate_bucket" {
-  description = "Name of your tfstate bucket" #create this bucket manually manually
-  type        = string
-}
