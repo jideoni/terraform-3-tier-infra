@@ -9,7 +9,15 @@ CI/CD pipeline: Git Actions
 
 -> tfsec for static security analysis and scanning
 
-\*ALL SECURITY GROUP PING RULES ARE FOR TESTING CONNECTIVITY
+- ALL SECURITY GROUP PING RULES ARE FOR TESTING CONNECTIVITY
+
+- TO USE THIS REPO, CREATE MANUALLY:
+
+1. ROUTE 53 HOSTED ZONE AND DNS NAME
+2. tfstate S3 BUCKET
+3. dev.tfvars file in your dev folder, include the lines below:
+   zone_id = "Z0140\***\*\*\*\*\*\*\***" (replace with the zone id of the hosted zone you created manually)
+   state_bucket = "your-state-bucket-name"
 
 The setup is as follows:
 Frontend: NGINX + NodeJS (React)

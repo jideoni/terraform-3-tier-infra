@@ -8,9 +8,9 @@ import {
   id = var.zone_id # Replace with your actual Hosted Zone ID when you run terraform plan
 }
 
-resource "aws_route53_record" "www" {
+resource "aws_route53_record" "ruby_dev" {
   zone_id = aws_route53_zone.jideweb_zone.id
-  name    = "ruby"
+  name    = "rubydev"
   type    = "A"
 
   alias {
