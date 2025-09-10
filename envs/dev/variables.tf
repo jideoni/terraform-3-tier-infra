@@ -33,14 +33,25 @@ variable "instance_number_asg" {
   }
 }
 
-variable "your_email" {
-  description = "the email address where you want notifications to go"
-  type        = string
-  default     = "youremailaddress@gmail.com" #your email address here
-}
-
 variable "instance_type_web_and_app" {
   description = "Instance type for WEB and APP TIER"
   type        = string
   default     = "t3.micro"
+}
+
+variable "your_email" {
+  description = "The email address where you want notifications to go"
+  type        = string
+  default     = "youremail@gmail.com"
+  #input your email address when you run terraform plan
+}
+
+variable "zone_id" {
+  description = "Your Zone ID, eg: Z01409********"
+  type        = string
+} #id of the existing zone you want to import
+
+variable "tfstate_bucket" {
+  description = "Name of your tfstate bucket" #create this bucket manually manually
+  type        = string
 }
