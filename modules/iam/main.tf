@@ -206,8 +206,7 @@ data "aws_iam_policy_document" "kms_policy_document" {
     sid    = "Allow Auto Scaling to use the key"
     effect = "Allow"
     principals {
-      type = "AWS"
-      #identifiers = ["arn:aws:iam::380255901104:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"]
+      type        = "AWS"
       identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"]
     }
     actions   = local.kms_common_actions

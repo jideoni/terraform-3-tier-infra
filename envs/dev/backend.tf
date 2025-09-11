@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket  = var.tfstate_bucket
+    bucket  = "ruby-dev-tfstatefile"
     key     = "state/terraform.tfstate"
     region  = "ca-central-1"
     encrypt = true
