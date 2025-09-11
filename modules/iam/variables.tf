@@ -16,8 +16,7 @@ variable "ssm_and_s3_read_only_managed_policies" {
   type = list(string)
   default = [
     "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
-    "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess",
-    "arn:aws:iam::aws:policy/AdministratorAccess"
+    "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
   ]
 }
 
