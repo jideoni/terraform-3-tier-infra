@@ -1,9 +1,11 @@
 Terraform modules to set up and a highly available, fault-tolerant, secure, and scalable 3-tier infrastructure on AWS.
 Each environment has over 100 resources to support your App.
 
-Cloud Environment: AWS
-IaC: Terraform
-CI/CD pipeline: Git Actions
+This infrastructure ensures seamless and replicable, application delivery across multiple environments.
+
+- Cloud Environment: AWS
+- IaC: Terraform
+- CI/CD pipeline: Git Actions
 
 -> tflint for automatic script examinination to identify potential issues, errors, and deviations from best practices.
 
@@ -24,15 +26,15 @@ Frontend: NGINX + NodeJS (React)
 Backend: React + MySQL
 DB: Aurora MySQL
 
-It runs no real application.
-To test your connection, launch an EC2 instance in internal ALB Security group, and another EC2 instance in external ALB security group. Then ping the IP address of EC2 instances in web and app subnets respectively.
+To test your connection, launch an EC2 instance in public subnet with internal ALB Security group, and another EC2 instance in a public subnet with an external ALB security group. Then ping the IP address of EC2 instances in web and app subnets respectively.
 
-Be sure to replace the following values in your envs/dev/variables.tf file
-Region: ca-central-1
-AZs : ca-central-1a, ca-central-1b, ca-central-1d
-App name: Ruby
-Your email address to receive notifications
-Your S3 bucket name
+Be sure to replace (if need be) the following values in your envs/dev/variables.tf file
+
+- Region
+- AZs
+- App name
+- Your email address to receive notifications
+- Your S3 bucket name
 
 Components created
 

@@ -38,6 +38,9 @@ module "create_buckets" {
   kms_key_arn = module.kms.key_arn
 }
 
+################################################
+#$$$$$$$$$$$$$$$$$ COSTS MONEY $$$$$$$$$$$$$$$$#
+################################################
 #Uncomment this section to launch DB
 /*module "rds" {
   source = "../../modules/rds"
